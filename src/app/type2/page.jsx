@@ -174,78 +174,6 @@ const CameraView = ({ onFinishScan, onCancel }) => {
     return () => clearInterval(interval);
   }, [scanning, itemsFound]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    let cleanup = () => {};
-
-    const startShakeListener = () => {
-      const SHAKE_THRESHOLD = 22; // tune if needed
-      const COOLDOWN_MS = 1200;
-
-      const onMotion = (event) => {
-        const acc = event.accelerationIncludingGravity;
-        if (!acc) return;
-
-        const x = Math.abs(acc.x || 0);
-        const y = Math.abs(acc.y || 0);
-        const z = Math.abs(acc.z || 0);
-        const magnitude = x + y + z;
-
-        const now = Date.now();
-        if (
-          magnitude > SHAKE_THRESHOLD &&
-          now - lastShakeRef.current > COOLDOWN_MS
-        ) {
-          lastShakeRef.current = now;
-          handleSave(); // <- use your existing save action
-        }
-      };
-
-      window.addEventListener("devicemotion", onMotion);
-      cleanup = () => window.removeEventListener("devicemotion", onMotion);
-    };
-
-    const requestIfNeeded = async () => {
-      const isIOS13Plus =
-        typeof DeviceMotionEvent !== "undefined" &&
-        typeof DeviceMotionEvent.requestPermission === "function";
-
-      if (!isIOS13Plus) {
-        startShakeListener();
-        return;
-      }
-
-      // iOS requires permission from a user gesture; this tries once after first tap.
-      const askOnFirstGesture = async () => {
-        if (motionPermissionAskedRef.current) return;
-        motionPermissionAskedRef.current = true;
-
-        try {
-          const permission = await DeviceMotionEvent.requestPermission();
-          if (permission === "granted") startShakeListener();
-        } catch {
-          // no-op
-        }
-
-        window.removeEventListener("click", askOnFirstGesture);
-        window.removeEventListener("touchstart", askOnFirstGesture);
-      };
-
-      window.addEventListener("click", askOnFirstGesture, { once: true });
-      window.addEventListener("touchstart", askOnFirstGesture, { once: true });
-
-      cleanup = () => {
-        window.removeEventListener("click", askOnFirstGesture);
-        window.removeEventListener("touchstart", askOnFirstGesture);
-      };
-    };
-
-    requestIfNeeded();
-
-    return () => cleanup();
-  }, [handleSave]);
-
   return (
     <div className="relative h-full w-full bg-white flex flex-col items-center justify-between overflow-hidden">
       <button
@@ -435,6 +363,34 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
     setTimeout(() => setLastAction(null), 800);
   }, [currentItem, savedIds, onToggleSave]);
 
+  // Handle iOS permission on first interaction
+  const requestMotionPermission = useCallback(async () => {
+    if (
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      try {
+        const permissionState = await DeviceMotionEvent.requestPermission();
+        if (permissionState === "granted") {
+          // Permission granted
+        }
+      } catch (e) {
+        console.error("Motion permission error:", e);
+      }
+    }
+  }, []);
+
+  const handleHeartClick = (e) => {
+    e.stopPropagation();
+    handleToggle();
+    requestMotionPermission();
+  };
+
+  const handleSimulateShake = (e) => {
+    e.stopPropagation();
+    handleToggle();
+  };
+
   useShake(() => {
     if (!savedIds.has(currentItem.id)) {
       handleToggle();
@@ -530,10 +486,7 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
 
           <div className="flex flex-col items-center">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleToggle();
-              }}
+              onClick={handleHeartClick}
               className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform active:scale-90 ${
                 isSaved
                   ? "bg-red-500 text-white shadow-red-500/30"
@@ -542,10 +495,13 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
             >
               <Heart size={28} className={isSaved ? "fill-current" : ""} />
             </button>
-            <div className="flex items-center gap-1 mt-2 text-zinc-400 text-[10px] uppercase tracking-wider font-semibold">
+            <button
+              onClick={handleSimulateShake}
+              className="flex items-center gap-1 mt-2 text-zinc-400 text-[10px] uppercase tracking-wider font-semibold hover:text-blue-500 transition-colors cursor-pointer"
+            >
               <Smartphone size={10} />
-              <span>Shake to save</span>
-            </div>
+              <span>Lorem Shake</span>
+            </button>
           </div>
 
           <button
