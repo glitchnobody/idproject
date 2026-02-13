@@ -23,46 +23,46 @@ import {
 const MOCK_ITEMS = [
   {
     id: 1,
-    name: "Lorem Ipsum Dolor",
+    name: "Item 1",
     price: "$245.00",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
     image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800",
-    category: "Lorem",
+      "https://plus.unsplash.com/premium_photo-1679811672048-9d4b810a7588?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "catergory",
     rating: 4,
   },
   {
     id: 2,
-    name: "Sit Amet Consectetur",
+    name: "Item 2",
     price: "$42.50",
     description:
       "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.",
     image:
-      "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&q=80&w=800",
-    category: "Ipsum",
+      "https://images.unsplash.com/photo-1766585748913-292eb14bb0da?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "catergory",
     rating: 5,
   },
   {
     id: 3,
-    name: "Adipiscing Elit Sed",
+    name: "Item 3",
     price: "$299.00",
     description:
       "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem.",
     image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
-    category: "Dolor",
+      "https://images.unsplash.com/photo-1693987646600-c911a3f571b7?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "catergory",
     rating: 3,
   },
   {
     id: 4,
-    name: "Tempor Incididunt Ut",
+    name: "Item 4",
     price: "$35.00",
     description:
       "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.",
     image:
-      "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop&q=80&w=800",
-    category: "Sit Amet",
+      "https://images.unsplash.com/photo-1661915607145-f658c054dcd2?q=80&w=1338&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "catergory",
     rating: 4,
   },
 ];
@@ -266,7 +266,7 @@ const BottomNavbar = ({ currentView, onChangeView }) => {
           size={22}
           className={currentView === "liked" ? "fill-current" : ""}
         />
-        <span className="text-[10px] font-medium">Lorem</span>
+        <span className="text-[10px] font-medium">Liked</span>
       </button>
 
       <div className="relative -top-6 group">
@@ -280,7 +280,7 @@ const BottomNavbar = ({ currentView, onChangeView }) => {
 
       <button className="flex flex-col items-center gap-1 w-16 text-zinc-400">
         <User size={22} />
-        <span className="text-[10px] font-medium">Ipsum</span>
+        <span className="text-[10px] font-medium">profile</span>
       </button>
     </div>
   );
@@ -452,11 +452,14 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
           </div>
 
           <div className="p-5">
-            <div className="flex justify-between items-start mb-2">
+            <div className=" flex justify-between items-center mb-2">
               <h3 className="text-xl font-bold text-zinc-900 leading-tight pr-4">
                 {currentItem.name}
               </h3>
-              <StarRating rating={currentItem.rating} />
+              <div className=" flex flex-col justify-end items-end">
+                <span className="text-xs">Rating</span>
+                <StarRating rating={currentItem.rating} />
+              </div>
             </div>
 
             <p className="text-zinc-500 text-sm line-clamp-2 mb-4">
@@ -465,7 +468,7 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
 
             <div className="flex items-center gap-2 text-xs text-blue-500 font-medium">
               <Info size={14} />
-              <span>Lorem ipsum dolor sit</span>
+              <span>Learn More</span>
             </div>
           </div>
         </div>
@@ -499,8 +502,8 @@ const CardDeck = ({ items, onOpenDetail, savedIds, onToggleSave }) => {
               onClick={handleSimulateShake}
               className="flex items-center gap-1 mt-2 text-zinc-400 text-[10px] uppercase tracking-wider font-semibold hover:text-blue-500 transition-colors cursor-pointer"
             >
-              <Smartphone size={10} />
-              <span>Lorem Shake</span>
+              <Heart size={10} />
+              <span>Shake to like</span>
             </button>
           </div>
 
@@ -561,8 +564,8 @@ const DetailsDrawer = ({ item, isOpen, onClose }) => {
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur text-white px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1">
-              <Zap size={14} className="text-yellow-400 fill-yellow-400" />
-              Lorem Verified
+              <Star size={14} className="text-yellow-400 fill-yellow-400" />
+              Verified
             </div>
           </div>
 

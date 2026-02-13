@@ -17,6 +17,11 @@ export default function Home() {
               Type 2
             </Link>
           </li>
+          <li>
+            <Link href="/type3" className="text-blue-500 hover:underline">
+              Type 3
+            </Link>
+          </li>
         </ul>
       </main>
     </div>
