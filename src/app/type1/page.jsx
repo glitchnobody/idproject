@@ -309,13 +309,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fbf6f1] flex flex-col items-center overflow-hidden font-sans">
-      <header className="w-full py-8 text-center border-b border-[#f3eee8] bg-[#fbf6f1] z-50">
+      <header className="w-full py-2 text-center border-b border-[#f3eee8] bg-[#fbf6f1] z-50">
         <h1 className="text-3xl font-serif text-[#6d675b] italic">
           Craft Verify
         </h1>
       </header>
 
-      <main className="flex-1 w-full max-w-md px-6 relative mt-20 mb-8 flex flex-col items-center justify-center">
+      <main className="flex-1 w-full max-w-md px-6 relative mt-3 mb-1 flex flex-col items-center justify-center">
         <div className="relative w-full aspect-[3/5]">
           <ShareCard />
           <AnimatePresence
@@ -337,7 +337,7 @@ export default function App() {
         </div>
 
         {/* Global Swipe Progress Dots */}
-        <div className="flex gap-3 mt-12 mb-2 z-50">
+        <div className="flex gap-3 mt-4 mb-2 z-50">
           {INITIAL_CARDS.map((_, i) => {
             const isActive = i <= swipedCount;
             return (
