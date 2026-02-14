@@ -91,7 +91,7 @@ const StarRating = ({ rating }) => {
 /**
  * HOOK: useShake
  */
-const useShake = (onShake, threshold = 500) => {
+const useShake = (onShake, threshold = 1000) => {
   useEffect(() => {
     let lastX = 0;
     let lastY = 0;
